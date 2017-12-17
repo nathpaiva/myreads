@@ -29,6 +29,10 @@ class BooksApp extends React.Component {
     });
   }
 
+  onRead = (e) => {
+    console.log("value: ", e.target.value);
+  }
+
   render() {
     return (
       <div className="app">
@@ -36,7 +40,8 @@ class BooksApp extends React.Component {
         <Route exact path='/' render={() => <ListBooks
           currentlyReading={this.state.currentlyReading}
           wantToRead={this.state.wantToRead}
-          read={this.state.read} />} />
+          read={this.state.read}
+          onRead={(e) => this.onRead(e)} />} />
       </div>
     )
   }

@@ -9,6 +9,7 @@ class ListBooks extends Component {
     currentlyReading: PropTypes.array.isRequired,
     wantToRead: PropTypes.array.isRequired,
     read: PropTypes.array.isRequired,
+    onRead: PropTypes.func.isRequired
   };
 
   render() {
@@ -20,13 +21,13 @@ class ListBooks extends Component {
         <div className="list-books-content">
           <div>
             <div className="bookshelf">
-              <ViewBooks books={this.props.currentlyReading} title="Currently Reading" />
+              <ViewBooks books={this.props.currentlyReading} onRead={this.props.onRead} title="Currently Reading" />
             </div>
             <div className="bookshelf">
-              <ViewBooks books={this.props.wantToRead} title="Want To Read" />
+              <ViewBooks books={this.props.wantToRead} onRead={this.props.onRead} title="Want To Read" />
             </div>
             <div className="bookshelf">
-              <ViewBooks books={this.props.read} title="Read" />
+              <ViewBooks books={this.props.read} onRead={this.props.onRead} title="Read" />
             </div>
           </div>
         </div>
