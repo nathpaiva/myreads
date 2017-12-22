@@ -8,12 +8,11 @@ class ViewBooks extends Component {
         <div className="bookshelf-books">
           <ol className="books-grid">
             {this.props.books.map(book => <li key={book.id}>
-            {console.log(book)}
               <div className="book">
                 <div className="book-top">
                   <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.smallThumbnail}")` }}></div>
                   <div className="book-shelf-changer">
-                    <select onChange={(e) => this.props.onRead(e)}>
+                    <select defaultValue={book.shelf} onChange={(e) => this.props.onRead(e, book)}>
                       <option value="none" disabled>Move to...</option>
                       <option value="currentlyReading">Currently Reading</option>
                       <option value="wantToRead">Want to Read</option>

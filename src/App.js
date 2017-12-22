@@ -29,8 +29,18 @@ class BooksApp extends React.Component {
     });
   }
 
-  onRead = (e) => {
-    console.log("value: ", e.target.value);
+  onRead = (e, book) => {
+    e.persist();
+    BooksAPI.update(book, e.target.value).then(data => {
+      const oldShelf = book.shelf;
+      const newListOfCurrentShelf = this.state[book.shelf].filter(item => item.id !== book.id);
+      book.shelf = e.target.value;
+
+      this.setState(state => ({
+        [e.target.value]: state[e.target.value].concat([book]),
+        [oldShelf]: newListOfCurrentShelf,
+      }));
+    });
   }
 
   render() {
@@ -41,7 +51,7 @@ class BooksApp extends React.Component {
           currentlyReading={this.state.currentlyReading}
           wantToRead={this.state.wantToRead}
           read={this.state.read}
-          onRead={(e) => this.onRead(e)} />} />
+          onRead={(e, book) => this.onRead(e, book)} />} />
       </div>
     )
   }
