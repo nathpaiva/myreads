@@ -7,16 +7,11 @@ import ListBooks from './components/ListBooks';
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
+    books: [],
     showSearchPage: false,
     currentlyReading: [],
     wantToRead: [],
-    read: []
+    read: [],
   }
 
   componentDidMount() {
@@ -29,28 +24,48 @@ class BooksApp extends React.Component {
     });
   }
 
+  findBook = (id) => {
+    BooksAPI.search(id).then(books => {
+      if (books.error === 'empty query') return;
+
+      this.setState({ books });
+    });
+  }
+
   onRead = (e, book) => {
     e.persist();
+
     BooksAPI.update(book, e.target.value).then(data => {
       const oldShelf = book.shelf;
-      const newListOfCurrentShelf = this.state[book.shelf].filter(item => item.id !== book.id);
-      book.shelf = e.target.value;
 
-      this.setState(state => ({
-        [e.target.value]: state[e.target.value].concat([book]),
-        [oldShelf]: newListOfCurrentShelf,
-      }));
+      if (e.target.value === 'none' || oldShelf) {
+        const newListOfCurrentShelf = this.state[book.shelf].filter(item => item.id !== book.id);
+        this.setState(state => ({
+          [oldShelf]: newListOfCurrentShelf,
+        }));
+      }
+
+      if (e.target.value !== 'none') {
+        book.shelf = e.target.value;
+        this.setState(state => ({
+          [e.target.value]: state[e.target.value].concat([book])
+        }));
+      }
     });
   }
 
   render() {
     return (
       <div className="app">
-        <Route path='/search' component={Search} />
         <Route exact path='/' render={() => <ListBooks
           currentlyReading={this.state.currentlyReading}
           wantToRead={this.state.wantToRead}
           read={this.state.read}
+          onRead={(e, book) => this.onRead(e, book)} />} />
+
+        <Route path='/search' render={() => <Search
+          books={this.state.books}
+          findBook={(id) => this.findBook(id)}
           onRead={(e, book) => this.onRead(e, book)} />} />
       </div>
     )

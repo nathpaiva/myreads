@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ViewBooks from './ViewBooks';
+import GridBooks from './GridBooks';
 import PropTypes from 'prop-types'
 
 class ListBooks extends Component {
@@ -21,13 +21,13 @@ class ListBooks extends Component {
         <div className="list-books-content">
           <div>
             <div className="bookshelf">
-              <ViewBooks books={this.props.currentlyReading} onRead={this.props.onRead} title="Currently Reading" />
+              <GridBooks books={this.props.currentlyReading} onRead={this.props.onRead} title="Currently Reading" />
             </div>
             <div className="bookshelf">
-              <ViewBooks books={this.props.wantToRead} onRead={this.props.onRead} title="Want To Read" />
+              <GridBooks books={this.props.wantToRead} onRead={this.props.onRead} title="Want To Read" />
             </div>
             <div className="bookshelf">
-              <ViewBooks books={this.props.read} onRead={this.props.onRead} title="Read" />
+              <GridBooks books={this.props.read} onRead={this.props.onRead} title="Read" />
             </div>
           </div>
         </div>
