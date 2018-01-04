@@ -25,6 +25,11 @@ class BooksApp extends React.Component {
   }
 
   findBook = (id) => {
+    if (!id.length) {
+      this.setState({ books: [] });
+      return;
+    }
+
     BooksAPI.search(id).then(books => {
       if (books.error === 'empty query') return;
 
