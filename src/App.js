@@ -8,19 +8,12 @@ import ListBooks from './components/ListBooks';
 class BooksApp extends React.Component {
   state = {
     books: [],
-    showSearchPage: false,
-    currentlyReading: [],
-    wantToRead: [],
-    read: [],
+    booksGrid: [],
   }
 
   componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
-      const wantToRead = books.filter(book => book.shelf === 'wantToRead');
-      const read = books.filter(book => book.shelf === 'read');
-
-      this.setState({ currentlyReading, wantToRead, read });
+    BooksAPI.getAll().then(booksGrid => {
+      this.setState({ booksGrid });
     });
   }
 
@@ -41,21 +34,22 @@ class BooksApp extends React.Component {
     e.persist();
 
     BooksAPI.update(book, e.target.value).then(data => {
-      const oldShelf = book.shelf;
-
-      if (e.target.value === 'none' || oldShelf) {
-        const newListOfCurrentShelf = this.state[book.shelf].filter(item => item.id !== book.id);
-        this.setState(state => ({
-          [oldShelf]: newListOfCurrentShelf,
-        }));
-      }
-
-      if (e.target.value !== 'none') {
+      let newBooksGrid;
+      if (!book.shelf) {
+        newBooksGrid = this.state.booksGrid;
         book.shelf = e.target.value;
-        this.setState(state => ({
-          [e.target.value]: state[e.target.value].concat([book])
-        }));
+        newBooksGrid.push(book);
+      } else {
+        newBooksGrid = this.state.booksGrid.map(item => {
+          if(item.id === book.id) item.shelf = e.target.value;
+
+          return item;
+        });
       }
+
+      this.setState(state => ({
+        booksGrid: newBooksGrid
+      }));
     });
   }
 
@@ -63,9 +57,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route exact path='/' render={() => <ListBooks
-          currentlyReading={this.state.currentlyReading}
-          wantToRead={this.state.wantToRead}
-          read={this.state.read}
+          booksGrid={this.state.booksGrid}
           onRead={(e, book) => this.onRead(e, book)} />} />
 
         <Route path='/search' render={() => <Search
