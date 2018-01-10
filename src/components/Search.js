@@ -10,13 +10,36 @@ class Search extends Component {
     onRead: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    const debounce = this.debounce;
+    this.updateQuery = debounce(() => {
+      this.search();
+    }, 280);
+  }
+
   state = {
     query: '',
   }
 
-  updateQuery = q => {
-    this.setState({query: q});
-    this.props.findBook(q);
+  debounce = (func, wait, immediate) => {
+    let timeout;
+    return function() {
+      const context = this, args = arguments;
+      const later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
+
+  search = () => {
+    this.props.findBook(this.state.query);
   }
 
   render() {
@@ -28,7 +51,10 @@ class Search extends Component {
             <input type="text"
               placeholder="Search by title or author"
               value={this.state.query}
-              onChange={(event) => this.updateQuery(event.target.value)}
+              onChange={(event) => {
+                this.setState({query: event.target.value});
+                this.updateQuery();
+              }}
             />
           </div>
         </div>
