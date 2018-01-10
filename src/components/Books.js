@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
 const Book = ({ books, onRead }) => {
   return (
@@ -25,6 +26,11 @@ const Book = ({ books, onRead }) => {
       </li>)}
     </ol>
   );
-}
+};
+
+Book.propTypes = {
+  books: PropTypes.array.isRequired,
+  onRead: PropTypes.func.isRequired
+};
 
 export default Book;
