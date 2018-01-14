@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import GridBooks from './GridBooks';
 import PropTypes from 'prop-types';
 
-const ListBooks = ({booksGrid, onRead}) => {
+const ListBooks = ({booksGrid, onRead, checkCurrentList}) => {
   const currentlyReading = booksGrid.filter(book => book.shelf === 'currentlyReading');
   const wantToRead = booksGrid.filter(book => book.shelf === 'wantToRead');
   const read = booksGrid.filter(book => book.shelf === 'read');
@@ -16,13 +16,13 @@ const ListBooks = ({booksGrid, onRead}) => {
       <div className="list-books-content">
         <div>
           <div className="bookshelf">
-            <GridBooks books={currentlyReading} onRead={onRead} title="Currently Reading" />
+            <GridBooks checkCurrentList={(book) => checkCurrentList(book)} books={currentlyReading} onRead={onRead} title="Currently Reading" />
           </div>
           <div className="bookshelf">
-            <GridBooks books={wantToRead} onRead={onRead} title="Want To Read" />
+            <GridBooks checkCurrentList={(book) => checkCurrentList(book)} books={wantToRead} onRead={onRead} title="Want To Read" />
           </div>
           <div className="bookshelf">
-            <GridBooks books={read} onRead={onRead} title="Read" />
+            <GridBooks checkCurrentList={(book) => checkCurrentList(book)} books={read} onRead={onRead} title="Read" />
           </div>
         </div>
       </div>
@@ -35,7 +35,8 @@ const ListBooks = ({booksGrid, onRead}) => {
 
 ListBooks.propTypes = {
   booksGrid: PropTypes.array.isRequired,
-  onRead: PropTypes.func.isRequired
+  onRead: PropTypes.func.isRequired,
+  checkCurrentList: PropTypes.func.isRequired,
 };
 
 export default ListBooks;

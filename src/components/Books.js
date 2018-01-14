@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 
-const Book = ({ books, onRead }) => {
+const Book = ({ books, onRead, checkCurrentList }) => {
   return (
     <ol className="books-grid">
       {books.map(book => <li key={book.id}>
@@ -9,7 +9,8 @@ const Book = ({ books, onRead }) => {
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.smallThumbnail}")` }}></div>
             <div className="book-shelf-changer">
-              <select defaultValue={typeof book.shelf === 'undefined' ? 'none' : book.shelf} onChange={(e) => onRead(e, book)}>
+            {/* checkCurrentList={(book) => this.checkCurrentList(book)} */}
+              <select defaultValue={typeof book.shelf === 'undefined' ? checkCurrentList(book) : book.shelf} onChange={(e) => onRead(e, book)}>
                 <option value="none" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>

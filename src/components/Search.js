@@ -8,6 +8,7 @@ class Search extends Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
     onRead: PropTypes.func.isRequired,
+    checkCurrentList: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -60,7 +61,8 @@ class Search extends Component {
         </div>
         <div className="search-books-results">
           <Books books={this.props.books}
-            onRead={this.props.onRead} />
+            onRead={this.props.onRead}
+            checkCurrentList={(book) => this.props.checkCurrentList(book)} />
         </div>
       </div>
     )

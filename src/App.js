@@ -17,6 +17,16 @@ class BooksApp extends React.Component {
     });
   }
 
+  checkCurrentList = (book) => {
+    const bookOnState = this.state.booksGrid.filter(bookGrid => {
+      if (bookGrid.id === book.id) {
+        return bookGrid;
+      }
+    });
+
+    return (bookOnState.length > 0) ? bookOnState[0].shelf : 'none';
+  }
+
   findBook = (id) => {
     if (!id.length) {
       this.setState({ books: [] });
@@ -57,13 +67,19 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route exact path='/' render={() => <ListBooks
-          booksGrid={this.state.booksGrid}
-          onRead={(e, book) => this.onRead(e, book)} />} />
+            booksGrid={this.state.booksGrid}
+            onRead={(e, book) => this.onRead(e, book)}
+            checkCurrentList={(book) => this.checkCurrentList(book)}
+          />}
+        />
 
         <Route path='/search' render={() => <Search
           books={this.state.books}
           findBook={(id) => this.findBook(id)}
-          onRead={(e, book) => this.onRead(e, book)} />} />
+          onRead={(e, book) => this.onRead(e, book)}
+          checkCurrentList={(book) => this.checkCurrentList(book)}
+          />}
+        />
       </div>
     )
   }
